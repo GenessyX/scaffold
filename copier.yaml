@@ -46,7 +46,15 @@ repository:
 license:
   type: str
   default: "MIT"
-  help: "License identifier (e.g. MIT, Apache-2.0)"
+  choices:
+    - MIT
+    - Apache-2.0
+  help: "Choose a license to stamp into LICENSE and project metadata"
+
+copyright_holder:
+  type: str
+  default: "{{ maintainer_name or project_name }}"
+  help: "Name for license copyright notice"
 
 _tasks:
   - git init

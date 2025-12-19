@@ -1,0 +1,56 @@
+_min_copier_version: "9.0.0"
+_subdirectory: template
+_jinja_extensions:
+  - copier_template_extensions.TemplateExtensionLoader
+  - extensions/git_config.py:GitConfigExtension
+
+project_name:
+  type: str
+  help: "Human-friendly project name (e.g. My Cool Library)"
+
+project_slug:
+  type: str
+  default: "{{ project_name|lower|replace(' ', '-') }}"
+  help: "PyPI-friendly slug (kebab-case)"
+
+package_name:
+  type: str
+  default: "{{ project_slug.replace('-', '_') }}"
+  help: "Python package import name (snake_case)"
+
+description:
+  type: str
+  default: "Awesome Python library"
+  help: "Short description for the package metadata"
+
+python_version:
+  type: str
+  default: "3.12"
+  help: "Minimum supported Python version (PEP 440 version specifier)"
+
+maintainer_name:
+  type: str
+  default: "{{ git_config('user.name') }}"
+  help: "Maintainer full name (defaults to git user.name)"
+
+maintainer_email:
+  type: str
+  default: "{{ git_config('user.email') }}"
+  help: "Maintainer email (defaults to git user.email)"
+
+repository:
+  type: str
+  default: ""
+  help: "Project git remote repository"
+
+license:
+  type: str
+  default: "MIT"
+  help: "License identifier (e.g. MIT, Apache-2.0)"
+
+_tasks:
+  - git init
+  - git branch -m main
+  - uv sync --all-groups
+  - uv run prek install
+  - uv run prek auto-update
